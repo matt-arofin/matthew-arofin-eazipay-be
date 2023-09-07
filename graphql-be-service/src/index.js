@@ -6,6 +6,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 import typeDefs from "./graphql/schema.js";
 import resolvers from "./graphql/resolvers.js";
+// import auth
 
 dotenv.config();
 
@@ -25,6 +26,9 @@ mongoose.connect(process.env.DB_CONNECTION_STRING, {
 const server = new ApolloServer({
   typeDefs,
   resolvers,
+  context: async ({ req }) => {
+    const user = await 
+  }
 });
 
 app.use(
