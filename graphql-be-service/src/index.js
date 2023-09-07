@@ -6,14 +6,13 @@ import dotenv from "dotenv";
 import cors from "cors";
 import typeDefs from "./graphql/schema.js";
 import resolvers from "./graphql/resolvers.js";
-// import auth
 
 dotenv.config();
 
 const app = express();
 
 mongoose.connect(process.env.DB_CONNECTION_STRING, {
-  useNewParser: true,
+  useNewUrlParser: true,
   useUnifiedTopology: true,
 })
   .then(() => {
@@ -27,9 +26,12 @@ const server = new ApolloServer({
   typeDefs,
   resolvers,
   context: async ({ req }) => {
-    const user = await 
+    const user = await req.user || null;
+    return { user };
   }
 });
+
+await server.start();
 
 app.use(
   '/graphql',
