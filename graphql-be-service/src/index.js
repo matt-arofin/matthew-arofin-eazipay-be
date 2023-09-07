@@ -1,9 +1,11 @@
 import express from "express";
-import { ApolloServer } from "apollo-server-express";
+import { ApolloServer } from "@apollo/server";
+import { expressMiddleware } from "@apollo/server/express4";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
-// import typeDefs from "./graphqlschema";
-// import resolvers from "./graphql/resolvers";
+import cors from "cors";
+import typeDefs from "./graphql/schema.js";
+import resolvers from "./graphql/resolvers.js";
 
 dotenv.config();
 
@@ -21,8 +23,8 @@ mongoose.connect(process.env.DB_CONNECTION_STRING, {
   });
 
 const server = new ApolloServer({
-  // typeDefs,
-  // resolvers,
+  typeDefs,
+  resolvers,
   context: ({ req }) => {
     // auth middleware
     return {
@@ -30,6 +32,15 @@ const server = new ApolloServer({
     };
   },
 });
+
+app.use(
+  '/graphql',
+  cors(),
+  express.json(),
+  expressMiddleware(server, {
+    context: async ({ req }) => ({ token: req.headers.token})
+  }),
+);
 
 server.applyMiddleware({ app });
 
