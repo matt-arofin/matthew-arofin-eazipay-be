@@ -1,10 +1,10 @@
-import { gql } from "@apollo-server-express";
+import { gql } from "apollo-server-express";
 
 const typeDefs = gql`
   type User {
     id: ID!
     username: String!
-    email : STring!
+    email : String!
     password: String!
   }
 

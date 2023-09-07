@@ -25,12 +25,6 @@ mongoose.connect(process.env.DB_CONNECTION_STRING, {
 const server = new ApolloServer({
   typeDefs,
   resolvers,
-  context: ({ req }) => {
-    // auth middleware
-    return {
-      //auth logic
-    };
-  },
 });
 
 app.use(
@@ -42,9 +36,8 @@ app.use(
   }),
 );
 
-server.applyMiddleware({ app });
 
-const PORT = process.env.PORT
+const PORT = process.env.PORT || 4000;
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}` )
